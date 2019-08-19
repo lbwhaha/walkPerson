@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        canvas{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body onload="Game()">
+<canvas id="cvs" width="500" height="500"></canvas>
+<script>
+    var cvs = document.getElementById('cvs');
+    var ctx = cvs.getContext('2d');
+    var gGame = null;
+    function Game() {
+        gGame = new Person();
+        gGame.update();
+    }
+    function Person() {
+        var _this = this;
+        this.frameX = 0;
+        this.frameY = 0;
+        this.positionX = 0;
+        this.positionY = 0;
+        this.img = new Image();
+        this.img.src = './NPC2.png';
+        this.draw = function () {
+            ctx.clearRect(0,0,cvs.width,cvs.height);
+            ctx.beginPath();
+            ctx.drawImage(_this.img,_this.frameX*_this.img.width/4,_this.frameY*_this.img.height/4,_this.img.width/4,_this.img.height/4,_this.positionX,_this.positionY,_this.img.width/4,_this.img.height/4)
+        };
+        this.updateFraandPos = function () {
+            document.onkeydown = function (e) {
+                _this.frameX = ++_this.frameX>=4?0:_this.frameX;
+                if (e.keyCode==37){
+                    _this.frameY = 1;
+                    _this.positionX--;
+                }
+                if (e.keyCode==38){
+                    _this.frameY = 3;
+                    _this.positionY--;
+                }
+                if (e.keyCode==39){
+                    _this.frameY = 2;
+                    _this.positionX++;
+                }
+                if (e.keyCode==40){
+                    _this.frameY = 0;
+                    _this.positionY++;
+                }
+            };
+            document.onkeyup = function () {
+                _this.frameX = 0;
+            };
+            if (_this.positionX>=460){
+                _this.positionX = 460;
+            }
+            if (_this.positionY>=435){
+                _this.positionY = 435;
+            }
+            if (_this.positionX<=0){
+                _this.positionX = 0;
+            }
+            if (_this.positionY<=0){
+                _this.positionY = 0;
+            }
+        };
+        this.update =function () {
+            _this.updateFraandPos();
+            _this.draw();
+            setTimeout(_this.update,167)
+        }
+    }
+</script>
+</body>
+</html>
